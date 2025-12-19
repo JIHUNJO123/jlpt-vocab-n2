@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:sat_vocab_app/l10n/generated/app_localizations.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:jlpt_vocab_app_n2/l10n/generated/app_localizations.dart';
 import '../db/database_helper.dart';
 import '../models/word.dart';
 import '../services/translation_service.dart';
+import '../services/display_service.dart';
 import 'word_detail_screen.dart';
 import 'favorites_flashcard_screen.dart';
 
@@ -15,12 +16,12 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   List<Word> _favorites = [];
-  List<Word> _allFavorites = []; // ?�본 즐겨찾기 목록
+  List<Word> _allFavorites = []; // ?占쎈낯 利먭꺼李얘린 紐⑸줉
   bool _isLoading = true;
   Map<int, String> _translatedDefinitions = {};
   bool _showNativeLanguage = true;
-  bool _showBandBadge = true; // Band 배�? ?�시 ?��?
-  String? _selectedBandFilter; // Band ?�터
+  bool _showBandBadge = true; // Band 諛곤옙? ?占쎌떆 ?占쏙옙?
+  String? _selectedBandFilter; // Band ?占쏀꽣
 
   @override
   void initState() {
@@ -36,12 +37,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final langCode = translationService.currentLanguage;
 
     if (translationService.needsTranslation) {
-      // JSON?�서 ?�장 번역 로드
+      // JSON?占쎌꽌 ?占쎌옣 踰덉뿭 濡쒕뱶
       final jsonWords =
           await DatabaseHelper.instance.getWordsWithTranslations();
 
       for (var word in favorites) {
-        // ?�장 번역�??�용 (API ?�출 ?�음)
+        // ?占쎌옣 踰덉뿭占??占쎌슜 (API ?占쎌텧 ?占쎌쓬)
         final jsonWord = jsonWords.firstWhere(
           (w) =>
               w.id == word.id ||
@@ -83,10 +84,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final l10n = AppLocalizations.of(context)!;
     final bands = [
       {'level': null, 'name': l10n.allWords, 'color': Colors.grey},
-      {'level': 'Band 4.5-5.5', 'name': 'Band 4.5-5.5', 'color': Colors.green},
-      {'level': 'Band 6.0-6.5', 'name': 'Band 6.0-6.5', 'color': Colors.blue},
-      {'level': 'Band 7.0-7.5', 'name': 'Band 7.0-7.5', 'color': Colors.orange},
-      {'level': 'Band 8.0+', 'name': 'Band 8.0+', 'color': Colors.red},
+      {'level': 'N2', 'name': 'N2', 'color': Colors.purple},
     ];
 
     showModalBottomSheet(
@@ -160,13 +158,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   Color _getLevelColor(String level) {
     switch (level) {
-      case 'Band 4.5-5.5':
+      case 'N5':
         return Colors.green;
-      case 'Band 6.0-6.5':
+      case 'N4':
         return Colors.blue;
-      case 'Band 7.0-7.5':
+      case 'N3':
         return Colors.orange;
-      case 'Band 8.0+':
+      case 'N2':
+        return Colors.purple;
+      case 'N1':
         return Colors.red;
       default:
         return Colors.blue;
@@ -194,7 +194,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         ),
         centerTitle: true,
         actions: [
-          // Band 배�? ?��?
+          // Band 諛곤옙? ?占쏙옙?
           if (_allFavorites.isNotEmpty)
             IconButton(
               icon: Icon(
@@ -208,7 +208,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 });
               },
             ),
-          // Band ?�터
+          // Band ?占쏀꽣
           if (_allFavorites.isNotEmpty)
             IconButton(
               icon: Icon(
@@ -312,7 +312,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           children: [
                             Expanded(
                               child: Text(
-                                word.word,
+                                word.getDisplayWord(
+                                  displayMode:
+                                      DisplayService.instance.displayMode,
+                                ),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -370,3 +373,5 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 }
+
+
