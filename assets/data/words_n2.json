@@ -4727,31 +4727,6 @@
     "reading": "あいまい"
   },
   {
-    "id": 5483,
-    "word": "あひら",
-    "level": "N2",
-    "kanji": "",
-    "hiragana": "あひら",
-    "partOfSpeech": "unknown",
-    "definition": "",
-    "example": "",
-    "translations": {
-      "en": {
-        "definition": "",
-        "example": ""
-      },
-      "ko": {
-        "definition": "아히라",
-        "example": ""
-      },
-      "zh": {
-        "definition": "あひら - ",
-        "example": ""
-      }
-    },
-    "source": "tanos.co.uk (CC BY)"
-  },
-  {
     "id": 5484,
     "word": "来日",
     "level": "N2",
@@ -11815,31 +11790,6 @@
     },
     "source": "tanos.co.uk (CC BY)",
     "reading": "どうせ"
-  },
-  {
-    "id": 5756,
-    "word": "滑れる",
-    "level": "N2",
-    "kanji": "滑れる",
-    "hiragana": "ずれる",
-    "partOfSpeech": "unknown",
-    "definition": "",
-    "example": "",
-    "translations": {
-      "en": {
-        "definition": "",
-        "example": ""
-      },
-      "ko": {
-        "definition": "미끄러지다",
-        "example": ""
-      },
-      "zh": {
-        "definition": "滑れる - 可滑的",
-        "example": ""
-      }
-    },
-    "source": "tanos.co.uk (CC BY)"
   },
   {
     "id": 5757,
