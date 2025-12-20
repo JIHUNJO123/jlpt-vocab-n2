@@ -69,6 +69,7 @@ class _WordListScreenState extends State<WordListScreen> {
         }
       });
     }
+  }
 
   Future<void> _loadInterstitialAd() async {
     final adService = AdService.instance;
