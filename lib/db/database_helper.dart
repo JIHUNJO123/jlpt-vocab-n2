@@ -80,9 +80,7 @@ class DatabaseHelper {
     try {
       // Load all word files: N5-N3, N2, N1
       final jsonFiles = [
-        'assets/data/words_n5_n3.json',
         'assets/data/words_n2.json',
-        'assets/data/words_n1.json',
       ];
 
       int totalWords = 0;
