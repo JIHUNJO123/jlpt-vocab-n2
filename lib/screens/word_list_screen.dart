@@ -31,7 +31,7 @@ class _WordListScreenState extends State<WordListScreen> {
   bool _isBannerAdLoaded = false;
   double _wordFontSize = 1.0;
   bool _showNativeLanguage = true;
-  bool _showBandBadge = true; // Band ë°°ì? ?œì‹œ ?¬ë?
+  bool _showBandBadge = true; // Band ë°°? ?ì‹œ ??
 
   final ScrollController _listScrollController = ScrollController();
 
@@ -57,14 +57,13 @@ class _WordListScreenState extends State<WordListScreen> {
   Future<void> _restoreScrollPosition() async {
     if (widget.isFlashcardMode) return;
     final prefs = await SharedPreferences.getInstance();
-    final offset = prefs.getDouble(_scrollOffsetKey) ?? 0.0;
-    if (offset > 0 && _listScrollController.hasClients) {
-      _listScrollController.jumpTo(offset);
-    } else if (offset > 0) {
-      // Controller not attached yet, wait for it
+    final position = prefs.getInt(_positionKey) ?? 0;
+    if (position > 0) {
+      // Wait for the ListView to be built
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_listScrollController.hasClients && mounted) {
-          _listScrollController.jumpTo(offset);
+          // Each item is approximately 80 pixels
+          _listScrollController.jumpTo(position * 80.0);
         }
       });
     }
@@ -161,7 +160,7 @@ class _WordListScreenState extends State<WordListScreen> {
     if (!translationService.needsTranslation) return;
     if (!mounted) return;
 
-    // ?´ì¥ ë²ˆì—­ë§??¬ìš© (API ?¸ì¶œ ?†ìŒ)
+    // ?ì¥ ë²ˆì—­??ìš© (API ?ì¶œ ?ìŒ)
     final langCode = translationService.currentLanguage;
     final embeddedDef = word.getEmbeddedTranslation(langCode, 'definition');
     final embeddedEx = word.getEmbeddedTranslation(langCode, 'example');
@@ -321,7 +320,9 @@ class _WordListScreenState extends State<WordListScreen> {
 
   Future<void> _saveScrollPosition(double offset) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(_scrollOffsetKey, offset);
+    // Save as item index instead of pixel offset for consistency
+    final itemIndex = (offset / 80.0).round();
+    await prefs.setInt(_positionKey, itemIndex);
   }
 
   @override
@@ -364,7 +365,7 @@ class _WordListScreenState extends State<WordListScreen> {
         ),
         centerTitle: true,
         actions: [
-          // Band ë°°ì? ?œì‹œ ? ê? ë²„íŠ¼ (All Words ë¦¬ìŠ¤?¸ì—?œë§Œ)
+          // Band ë°°? ?ì‹œ ?? ë²„íŠ¼ (All Words ë¦¬ìŠ¤?ì—?ë§Œ)
           // Band badge button removed for single-level app
           if (false) // Band badge disabled for N2 single-level app
             IconButton(
@@ -527,7 +528,7 @@ class _WordListScreenState extends State<WordListScreen> {
                     ),
                   ),
                 ),
-                // Band ë°°ì?: All Words?ì„œ ? ê? ê°??
+                // Band ë°°?: All Words?ì„œ ?? ??
                 if (false) // Level badge disabled for single-level app
                   Container(
                     padding: const EdgeInsets.symmetric(
