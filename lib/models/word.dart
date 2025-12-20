@@ -184,7 +184,7 @@ class Word {
   /// ?쒖옄? ?덈씪媛?섎? ?④퍡 ?쒖떆 (?쒖떆 諛⑹떇???곕씪)
   /// [displayMode]: 'parentheses' (愿꾪샇 蹂묎린) ?먮뒗 'furigana' (?꾨━媛??
   String getDisplayWord({String displayMode = 'parentheses'}) {
-    if (kanji != null && hiragana != null && kanji!.isNotEmpty && hiragana!.isNotEmpty) {
+    if (kanji != null && hiragana != null && kanji!.isNotEmpty && hiragana!.isNotEmpty && kanji != hiragana) {
       if (displayMode == 'furigana') {
         // ?꾨━媛??諛⑹떇: 繇잆겧??[?잆겧?귙겗]
         return '$kanji [$hiragana]';
