@@ -92,7 +92,9 @@
   "parenthesesMode": "Parentheses",
   "furiganaMode": "Brackets",
   "parenthesesExample": "e.g. 食べ物 (たべもの)",
-  "furiganaExample": "e.g. 食べ物 [たべもの]"
+  "furiganaExample": "e.g. 食べ物 [たべもの]",
+  "marketing": "Marketing",
+  "support": "Support"
 }
 
 
