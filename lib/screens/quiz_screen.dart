@@ -1,4 +1,4 @@
-﻿import 'dart:math';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:jlpt_vocab_app_n2/l10n/generated/app_localizations.dart';
 import '../db/database_helper.dart';
@@ -57,7 +57,7 @@ class _QuizScreenState extends State<QuizScreen> {
     await translationService.init();
     final langCode = translationService.currentLanguage;
 
-    // 紐⑤뱺 ?占쎌뼱???占???占쎌옣 踰덉뿭 濡쒕뱶 (?占쎈떟 ?占쏀깮吏??踰덉뿭?占쎌뼱????
+    // 紐⑤뱺 ?占쎌뼱???占???占쎌옣 踰덉뿭 濡쒕뱶 (?占쎈떟 ?占쏀깮吏??踰덉뿭?占쎌뼱????
     if (translationService.needsTranslation) {
       for (var word in words) {
         // ?占쎌옣 踰덉뿭占??占쎌씤 (API ?占쎌텧 ?占쎌쓬)
@@ -326,26 +326,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).primaryColor.withAlpha((0.1 * 255).toInt()),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        currentWord.level,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    // Level badge removed for single-level app
                     Text(
                       _quizType == QuizType.wordToMeaning
                           ? currentWord.getDisplayWord(displayMode: DisplayService.instance.displayMode)
