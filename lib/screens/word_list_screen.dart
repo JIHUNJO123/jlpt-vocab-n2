@@ -483,10 +483,17 @@ class _WordListScreenState extends State<WordListScreen> {
   }
 
   Widget _buildListView() {
-    return ListView.builder(
-      controller: _listScrollController,
-      padding: const EdgeInsets.all(16),
-      itemCount: _words.length,
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollEndNotification) {
+          _saveScrollPosition(_listScrollController.offset);
+        }
+        return false;
+      },
+      child: ListView.builder(
+        controller: _listScrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: _words.length,
       itemBuilder: (context, index) {
         final word = _words[index];
         _loadTranslationForWord(word);
@@ -574,6 +581,7 @@ class _WordListScreenState extends State<WordListScreen> {
           ),
         );
       },
+      ),
     );
   }
 
