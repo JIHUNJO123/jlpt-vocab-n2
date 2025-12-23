@@ -273,4 +273,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get support => '지원';
+
+  @override
+  String get cancel => '취소';
 }

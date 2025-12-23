@@ -273,4 +273,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get support => 'Support';
+
+  @override
+  String get cancel => 'Cancel';
 }
