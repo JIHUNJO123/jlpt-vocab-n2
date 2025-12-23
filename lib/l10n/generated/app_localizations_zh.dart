@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'JLPT Step N5–N3';
+  String get appTitle => 'JLPT Step N2';
 
   @override
   String get todayWord => '今日单词';

@@ -22,14 +22,14 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 5, // ?�자/?�라가???�드 추�?�?버전 ?�그?�이??
+      version: 6, // 한국어 번역 수정 버전
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
   }
 
   Future _createDB(Database db, int version) async {
-    // ?�어 ?�이�?(?�장 번역 ?�함)
+    // ?�어 ?�이�?(?�장 번역 ?�함)
     await db.execute('''
       CREATE TABLE words (
         id INTEGER PRIMARY KEY,
@@ -46,7 +46,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // 번역 캐시 ?�이�?
+    // 번역 캐시 ?�이�?
     await db.execute('''
       CREATE TABLE translations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,9 +79,7 @@ class DatabaseHelper {
   Future<void> _loadInitialData(Database db) async {
     try {
       // Load all word files: N5-N3, N2, N1
-      final jsonFiles = [
-        'assets/data/words_n2.json',
-      ];
+      final jsonFiles = ['assets/data/words_n2.json'];
 
       int totalWords = 0;
       for (final filePath in jsonFiles) {
@@ -90,11 +88,11 @@ class DatabaseHelper {
           final List<dynamic> data = json.decode(response);
 
           for (var wordJson in data) {
-        // translations�?JSON 문자?�로 ?�??
-        String? translationsJson;
-        if (wordJson['translations'] != null) {
-          translationsJson = json.encode(wordJson['translations']);
-        }
+            // translations�?JSON 문자?�로 ?�??
+            String? translationsJson;
+            if (wordJson['translations'] != null) {
+              translationsJson = json.encode(wordJson['translations']);
+            }
 
             await db.insert('words', {
               'id': wordJson['id'],
@@ -124,7 +122,7 @@ class DatabaseHelper {
 
   // ============ 번역 캐시 메서??============
 
-  /// 번역 캐시?�서 가?�오�?
+  /// 번역 캐시?�서 가?�오�?
   Future<String?> getTranslation(
     int wordId,
     String languageCode,
@@ -143,7 +141,7 @@ class DatabaseHelper {
     return null;
   }
 
-  /// 번역 캐시???�??
+  /// 번역 캐시???�??
   Future<void> saveTranslation(
     int wordId,
     String languageCode,
@@ -279,9 +277,7 @@ class DatabaseHelper {
     try {
       final List<Word> allWords = [];
       // 번역???�는 ?�일??먼�? 로드! (band*.json??번역 ?�이???�음)
-      final jsonFiles = [
-        'assets/data/words_n2.json',
-      ];
+      final jsonFiles = ['assets/data/words_n2.json'];
 
       for (final file in jsonFiles) {
         try {
@@ -290,7 +286,7 @@ class DatabaseHelper {
           final List<dynamic> data = json.decode(response);
           final words = data.map((json) => Word.fromJson(json)).toList();
           print('  Loaded ${words.length} words from $file');
-          // �?번째 ?�어??번역 ?�인
+          // �?번째 ?�어??번역 ?�인
           if (words.isNotEmpty && words.first.translations != null) {
             print(
               '  First word has translations: ${words.first.translations!.keys}',
@@ -313,7 +309,7 @@ class DatabaseHelper {
 
   /// ?�어 찾기 (번역???�는 ?�어 ?�선)
   Word? _findWordWithTranslation(List<Word> jsonWords, Word dbWord) {
-    // 같�? ?�어명으�?매칭?�는 모든 ?�어 찾기
+    // 같�? ?�어명으�?매칭?�는 모든 ?�어 찾기
     final matches =
         jsonWords
             .where((w) => w.word.toLowerCase() == dbWord.word.toLowerCase())
@@ -334,11 +330,11 @@ class DatabaseHelper {
     }
 
     print('No word with translations found');
-    // 번역 ?�으�?�?번째 반환
+    // 번역 ?�으�?�?번째 반환
     return matches.first;
   }
 
-  /// 모든 ?�어 가?�오�?(?�장 번역 ?�함) - ?�즈??
+  /// 모든 ?�어 가?�오�?(?�장 번역 ?�함) - ?�즈??
   Future<List<Word>> getWordsWithTranslations() async {
     final db = await instance.database;
     final dbResult = await db.query('words', orderBy: 'word ASC');
@@ -393,7 +389,7 @@ class DatabaseHelper {
 
       final finalWord = jsonWord ?? dbWord;
 
-      // DB??isFavorite ?�태?�?JSON??번역 ?�이??병합
+      // DB??isFavorite ?�태?�?JSON??번역 ?�이??병합
       final result2 = dbWord.copyWith(translations: finalWord.translations);
       print('Final word translations: ${result2.translations}');
       return result2;
@@ -403,7 +399,7 @@ class DatabaseHelper {
     }
   }
 
-  /// ?�벨�??�어 ??가?�오�?
+  /// ?�벨�??�어 ??가?�오�?
   Future<Map<String, int>> getWordCountByLevel() async {
     final db = await instance.database;
     final result = await db.rawQuery(
@@ -452,5 +448,3 @@ class DatabaseHelper {
     db.close();
   }
 }
-
-
