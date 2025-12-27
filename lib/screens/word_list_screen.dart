@@ -97,30 +97,31 @@ class _WordListScreenState extends State<WordListScreen> {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            const Icon(Icons.lock, color: Colors.orange),
-            const SizedBox(width: 8),
-            Expanded(child: Text(l10n.lockedContent)),
-          ],
-        ),
-        content: Text(l10n.watchAdToUnlock),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
+      builder:
+          (context) => AlertDialog(
+            title: Row(
+              children: [
+                const Icon(Icons.lock, color: Colors.orange),
+                const SizedBox(width: 8),
+                Expanded(child: Text(l10n.lockedContent)),
+              ],
+            ),
+            content: Text(l10n.watchAdToUnlock),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(l10n.cancel),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _watchAdToUnlock();
+                },
+                icon: const Icon(Icons.play_circle_outline),
+                label: Text(l10n.watchAd),
+              ),
+            ],
           ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-              _watchAdToUnlock();
-            },
-            icon: const Icon(Icons.play_circle_outline),
-            label: Text(l10n.watchAd),
-          ),
-        ],
-      ),
     );
   }
 
@@ -130,9 +131,9 @@ class _WordListScreenState extends State<WordListScreen> {
     final adService = AdService.instance;
 
     if (!adService.isAdReady) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.adNotReady)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.adNotReady)));
       adService.loadRewardedAd();
       return;
     }
@@ -142,9 +143,9 @@ class _WordListScreenState extends State<WordListScreen> {
         await adService.unlockUntilMidnight();
         if (mounted) {
           setState(() {});
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.unlockedUntilMidnight)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.unlockedUntilMidnight)));
         }
       },
     );
@@ -503,7 +504,10 @@ class _WordListScreenState extends State<WordListScreen> {
                   if (!AdService.instance.isUnlocked)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -516,7 +520,11 @@ class _WordListScreenState extends State<WordListScreen> {
                         onTap: _showUnlockDialog,
                         child: Row(
                           children: [
-                            const Icon(Icons.lock_open, color: Colors.white, size: 20),
+                            const Icon(
+                              Icons.lock_open,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
@@ -528,7 +536,10 @@ class _WordListScreenState extends State<WordListScreen> {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
@@ -536,8 +547,11 @@ class _WordListScreenState extends State<WordListScreen> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.play_circle_filled, 
-                                    color: Colors.deepOrange.shade400, size: 16),
+                                  Icon(
+                                    Icons.play_circle_filled,
+                                    color: Colors.deepOrange.shade400,
+                                    size: 16,
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     l10n.watchAd,
