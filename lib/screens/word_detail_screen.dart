@@ -63,7 +63,8 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
     return null;
   }
 
-  bool get _canGoPrevious => _hasNavigation && _findPreviousUnlockedIndex() != null;
+  bool get _canGoPrevious =>
+      _hasNavigation && _findPreviousUnlockedIndex() != null;
   bool get _canGoNext => _hasNavigation && _findNextUnlockedIndex() != null;
 
   void _goToPrevious() {
@@ -83,14 +84,13 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
     final newIndex = _findNextUnlockedIndex();
     if (newIndex == null) return;
 
-      setState(() {
-        _currentIndex = newIndex;
-        _word = widget.wordList![_currentIndex];
-        _translatedDefinition = null;
-        _translatedExample = null;
-      });
-      _loadTranslations();
-    }
+    setState(() {
+      _currentIndex = newIndex;
+      _word = widget.wordList![_currentIndex];
+      _translatedDefinition = null;
+      _translatedExample = null;
+    });
+    _loadTranslations();
   }
 
   Future<void> _loadTranslations() async {
