@@ -38,35 +38,50 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
 
   bool get _hasNavigation =>
       widget.wordList != null && widget.wordList!.length > 1;
-  bool get _canGoPrevious => _hasNavigation && _currentIndex > 0;
-  bool get _canGoNext =>
-      _hasNavigation && _currentIndex < widget.wordList!.length - 1;
 
-  // 잠긴 단어인지 확인 (짝수 인덱스 = 2, 4, 6...)
+  // 잠긴 단어인지 확인 (홀수 인덱스 = 1, 3, 5...)
   bool _isWordLocked(int index) {
     if (index % 2 == 0) return false;
     return !AdService.instance.isUnlocked;
   }
 
-  void _goToPrevious() {
-    if (_canGoPrevious) {
-      int newIndex = _currentIndex - 1;
-      if (_isWordLocked(newIndex)) return;
-
-      setState(() {
-        _currentIndex = newIndex;
-        _word = widget.wordList![_currentIndex];
-        _translatedDefinition = null;
-        _translatedExample = null;
-      });
-      _loadTranslations();
+  // 다음 무료 단어 인덱스 찾기
+  int? _findNextUnlockedIndex() {
+    if (widget.wordList == null) return null;
+    for (int i = _currentIndex + 1; i < widget.wordList!.length; i++) {
+      if (!_isWordLocked(i)) return i;
     }
+    return null;
+  }
+
+  // 이전 무료 단어 인덱스 찾기
+  int? _findPreviousUnlockedIndex() {
+    if (widget.wordList == null) return null;
+    for (int i = _currentIndex - 1; i >= 0; i--) {
+      if (!_isWordLocked(i)) return i;
+    }
+    return null;
+  }
+
+  bool get _canGoPrevious => _hasNavigation && _findPreviousUnlockedIndex() != null;
+  bool get _canGoNext => _hasNavigation && _findNextUnlockedIndex() != null;
+
+  void _goToPrevious() {
+    final newIndex = _findPreviousUnlockedIndex();
+    if (newIndex == null) return;
+
+    setState(() {
+      _currentIndex = newIndex;
+      _word = widget.wordList![_currentIndex];
+      _translatedDefinition = null;
+      _translatedExample = null;
+    });
+    _loadTranslations();
   }
 
   void _goToNext() {
-    if (_canGoNext) {
-      int newIndex = _currentIndex + 1;
-      if (_isWordLocked(newIndex)) return;
+    final newIndex = _findNextUnlockedIndex();
+    if (newIndex == null) return;
 
       setState(() {
         _currentIndex = newIndex;
@@ -283,7 +298,7 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: _currentIndex > 0 ? _goToPrevious : null,
+                      onPressed: _canGoPrevious ? _goToPrevious : null,
                       icon: const Icon(Icons.arrow_back),
                       label: Text(l10n.previous),
                       style: ElevatedButton.styleFrom(
@@ -294,10 +309,7 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
                       ),
                     ),
                     ElevatedButton.icon(
-                      onPressed:
-                          _currentIndex < widget.wordList!.length - 1
-                              ? _goToNext
-                              : null,
+                      onPressed: _canGoNext ? _goToNext : null,
                       icon: const Icon(Icons.arrow_forward),
                       label: Text(l10n.next),
                       style: ElevatedButton.styleFrom(
