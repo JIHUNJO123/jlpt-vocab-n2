@@ -353,22 +353,15 @@ class _WordListScreenState extends State<WordListScreen> {
   @override
   void dispose() {
     _pageController.dispose();
-    // Save scroll position before disposing
     if (!widget.isFlashcardMode && _listScrollController.hasClients) {
-      _saveScrollPosition(_listScrollController.offset);
+      final itemIndex = (_listScrollController.offset / 80.0).round();
+      _savePosition(itemIndex);
     }
     _listScrollController.dispose();
     if (widget.isFlashcardMode) {
       _savePosition(_currentFlashcardIndex);
     }
     super.dispose();
-  }
-
-  Future<void> _saveScrollPosition(double offset) async {
-    final prefs = await SharedPreferences.getInstance();
-    // Save as item index instead of pixel offset for consistency
-    final itemIndex = (offset / 80.0).round();
-    await prefs.setInt(_positionKey, itemIndex);
   }
 
   @override
@@ -586,9 +579,10 @@ class _WordListScreenState extends State<WordListScreen> {
 
   Widget _buildListView() {
     return NotificationListener<ScrollNotification>(
-      onNotification: (scrollNotification) {
-        if (scrollNotification is ScrollEndNotification) {
-          _saveScrollPosition(_listScrollController.offset);
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification) {
+          final itemIndex = (_listScrollController.offset / 80.0).round();
+          _savePosition(itemIndex);
         }
         return false;
       },
